@@ -25,18 +25,8 @@ jobs:
         run: npm install
 
       # 4. Start the application (if necessary for the tests)
-      - name: Start the application
-        run: npm start &
-        env:
-          CI: true
-
-      # 5. Wait for the application to be ready
-      - name: Wait for application to be ready
-        run: npx wait-on http://localhost:3000 --timeout 60000
-
-      # 6. Run Cypress tests
-      - name: Run Cypress tests
-        run: npm run cypress:run
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
 
   deploy:
     runs-on: ubuntu-latest
