@@ -6,9 +6,40 @@ on:
       - dev
 
 jobs:
+  # Step 1: Run Cypress tests
+  cypress-tests:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 2. Setup Node.js
+      - name: NodeJs Setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ secrets.node_version }}
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Start the application (if necessary for the tests)
+      - name: Start the application
+        run: npm start &
+        env:
+          CI: true
+
+      # 5. Wait for the application to be ready
+      - name: Wait for application to be ready
+        run: npx wait-on http://localhost:3000
+
+      # 6. Run Cypress tests
+      - name: Run Cypress tests
+        run: npm run cypress:run
+
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v1
